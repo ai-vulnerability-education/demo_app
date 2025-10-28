@@ -1,0 +1,522 @@
+[
+  {
+    "id": "nlp_001",
+    "text": "What is tokenization in NLP?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["tokenization", "basics"],
+    "expectedAnswer": "Tokenization is the process of breaking down text into smaller units called tokens, which can be words, subwords, or characters.",
+    "rubric": {
+      "keyPoints": ["breaking text", "smaller units", "tokens"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_002",
+    "text": "Explain the difference between stemming and lemmatization.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["preprocessing", "morphology"],
+    "expectedAnswer": "Stemming removes word endings to get root forms (e.g., 'running' → 'run'), while lemmatization uses vocabulary and morphological analysis to return the dictionary form (lemma) of a word.",
+    "rubric": {
+      "keyPoints": ["stemming cuts suffixes", "lemmatization uses dictionary", "lemmatization more accurate"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_003",
+    "text": "What are the main advantages of using pre-trained language models like BERT?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["transformers", "BERT"],
+    "options": [
+      "Transfer learning and better performance on downstream tasks",
+      "Lower computational requirements",
+      "No need for labeled data",
+      "Faster training time"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_004",
+    "text": "In our class project analyzing UVU student sentiment on Canvas discussion boards, you found that the basic tokenization approach was failing to properly handle academic terminology and student slang (e.g., 'CS1400', 'deadweek', 'GPA'). Design a custom tokenization strategy specifically for this dataset that addresses these issues. Your solution should:\n\n1. Identify at least 5 specific tokenization challenges from our Canvas dataset\n2. Propose preprocessing rules for each challenge\n3. Explain how your approach would improve the sentiment analysis accuracy\n4. Compare your strategy to both whitespace tokenization and BPE tokenization\n5. Provide pseudocode for your custom tokenizer\n\nJustify each design decision with specific examples from the UVU Canvas data we collected.",
+    "course": "NLP",
+    "type": "essay",
+    "bloomLevel": 6,
+    "contextDependency": 5,
+    "novelty": 5,
+    "tags": ["tokenization", "project-based", "custom-solution"],
+    "expectedAnswer": "This requires deep engagement with the specific project context and creative problem-solving.",
+    "rubric": {
+      "keyPoints": [
+        "Identifies dataset-specific challenges",
+        "Proposes concrete preprocessing rules",
+        "Demonstrates understanding of tokenization trade-offs",
+        "Provides working pseudocode",
+        "Justifies decisions with examples"
+      ],
+      "maxScore": 50
+    }
+  },
+  {
+    "id": "nlp_005",
+    "text": "Describe the attention mechanism in transformers.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["transformers", "attention"],
+    "expectedAnswer": "Attention mechanism allows the model to focus on different parts of the input sequence when processing each token, computing weighted relationships between all tokens.",
+    "rubric": {
+      "keyPoints": ["weighted relationships", "focus on relevant parts", "query-key-value"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_006",
+    "text": "What is the purpose of word embeddings?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["embeddings", "basics"],
+    "options": [
+      "To represent words as dense vectors that capture semantic meaning",
+      "To compress text files",
+      "To translate between languages",
+      "To generate new words"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_007",
+    "text": "Compare and contrast Word2Vec and GloVe embedding methods.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 4,
+    "contextDependency": 2,
+    "novelty": 2,
+    "tags": ["embeddings", "word2vec", "glove"],
+    "expectedAnswer": "Word2Vec uses local context windows (CBOW or Skip-gram), while GloVe uses global matrix factorization on word co-occurrence statistics. Both produce dense vectors but use different training objectives.",
+    "rubric": {
+      "keyPoints": ["Word2Vec local context", "GloVe global statistics", "both create dense vectors"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_008",
+    "text": "In our midterm project where you built a sentiment classifier for movie reviews, your model achieved 75% accuracy on the validation set but only 60% on the test set. The test set contains reviews from 2024, while training data was from 2020-2022.\n\nAnalyze this performance gap by:\n1. Identifying at least 3 specific reasons why temporal shift might affect sentiment analysis\n2. Proposing 2 different approaches to make your model more robust to temporal changes\n3. For each approach, explain the trade-offs and implementation challenges\n4. Design an experiment to validate which approach works better for our specific dataset\n5. Reflect on what this tells us about the limitations of supervised learning in NLP\n\nUse specific examples from the movie review domain and reference techniques we discussed in class.",
+    "course": "NLP",
+    "type": "essay",
+    "bloomLevel": 5,
+    "contextDependency": 5,
+    "novelty": 4,
+    "tags": ["sentiment-analysis", "evaluation", "project-based"],
+    "expectedAnswer": "Requires critical analysis of model performance, understanding of temporal shift, and creative problem-solving.",
+    "rubric": {
+      "keyPoints": [
+        "Identifies temporal shift causes",
+        "Proposes concrete solutions",
+        "Analyzes trade-offs",
+        "Designs valid experiment",
+        "Reflects on broader implications"
+      ],
+      "maxScore": 45
+    }
+  },
+  {
+    "id": "nlp_009",
+    "text": "What does BLEU score measure in machine translation?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["evaluation", "machine-translation"],
+    "expectedAnswer": "BLEU (Bilingual Evaluation Understudy) measures the similarity between machine-generated translation and human reference translations using n-gram precision.",
+    "rubric": {
+      "keyPoints": ["similarity metric", "n-gram precision", "reference translations"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_010",
+    "text": "Explain the vanishing gradient problem in RNNs.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["RNN", "deep-learning"],
+    "expectedAnswer": "In RNNs, gradients can become extremely small during backpropagation through time, making it difficult to learn long-range dependencies as earlier time steps receive negligible weight updates.",
+    "rubric": {
+      "keyPoints": ["gradients become small", "backpropagation through time", "affects long sequences"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_011",
+    "text": "What is the main difference between LSTM and GRU?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["RNN", "LSTM", "GRU"],
+    "options": [
+      "LSTM has separate forget and input gates, while GRU combines them into an update gate",
+      "LSTM is faster than GRU",
+      "GRU cannot handle long sequences",
+      "LSTM requires more training data"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_012",
+    "text": "During our named entity recognition (NER) lab using spaCy, you noticed that the pre-trained model consistently failed to identify 'UVU', 'Orem', and specific CS course codes as entities, even though these are crucial for analyzing our campus-specific text data.\n\nDevelop a comprehensive solution:\n1. Explain why pre-trained NER models struggle with domain-specific entities\n2. Design a strategy to extend spaCy's NER for UVU-specific entities (don't just say 'fine-tune' - be specific)\n3. Create a labeled training dataset specification: what entities would you include, how many examples, and why?\n4. Propose an evaluation methodology that goes beyond standard precision/recall\n5. Implement pseudocode for a rule-based component that could complement the ML model\n\nYour answer should demonstrate understanding of both the technical NLP concepts and the practical challenges of deploying NLP in a specific institutional context.",
+    "course": "NLP",
+    "type": "essay",
+    "bloomLevel": 6,
+    "contextDependency": 5,
+    "novelty": 5,
+    "tags": ["NER", "domain-adaptation", "project-based"],
+    "expectedAnswer": "Requires synthesis of multiple concepts, domain-specific problem-solving, and creative technical design.",
+    "rubric": {
+      "keyPoints": [
+        "Explains domain mismatch",
+        "Specific extension strategy",
+        "Well-designed dataset spec",
+        "Thoughtful evaluation plan",
+        "Working pseudocode"
+      ],
+      "maxScore": 50
+    }
+  },
+  {
+    "id": "nlp_013",
+    "text": "What is TF-IDF and what does it measure?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["information-retrieval", "basics"],
+    "expectedAnswer": "TF-IDF (Term Frequency-Inverse Document Frequency) measures word importance by combining term frequency in a document with inverse document frequency across the corpus.",
+    "rubric": {
+      "keyPoints": ["term frequency", "inverse document frequency", "word importance"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_014",
+    "text": "Describe the encoder-decoder architecture in sequence-to-sequence models.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 2,
+    "novelty": 2,
+    "tags": ["seq2seq", "architecture"],
+    "expectedAnswer": "The encoder processes the input sequence into a fixed-size context vector, which the decoder uses to generate the output sequence token by token.",
+    "rubric": {
+      "keyPoints": ["encoder processes input", "context vector", "decoder generates output"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_015",
+    "text": "What is the purpose of the softmax function in NLP models?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["neural-networks", "basics"],
+    "options": [
+      "Convert logits to probability distribution",
+      "Reduce overfitting",
+      "Speed up training",
+      "Normalize input text"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_016",
+    "text": "Explain what positional encoding does in transformers.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 2,
+    "novelty": 2,
+    "tags": ["transformers", "architecture"],
+    "expectedAnswer": "Positional encoding adds information about token positions to embeddings since transformers don't have inherent sequential structure like RNNs.",
+    "rubric": {
+      "keyPoints": ["adds position information", "transformers lack sequential structure", "added to embeddings"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_017",
+    "text": "What is beam search in the context of text generation?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["generation", "decoding"],
+    "expectedAnswer": "Beam search is a decoding algorithm that explores multiple hypothesis sequences simultaneously by keeping track of the top-k most probable sequences at each step.",
+    "rubric": {
+      "keyPoints": ["explores multiple hypotheses", "keeps top-k sequences", "better than greedy decoding"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_018",
+    "text": "In our final project on building a question-answering system for UVU's CS department FAQ, you need to choose between fine-tuning BERT, using GPT-4 with few-shot prompting, or building a custom retrieval-augmented generation (RAG) system.\n\nProvide a detailed comparative analysis:\n1. For each approach, list specific advantages and disadvantages in the context of our FAQ system\n2. Estimate the resources needed (data, compute, time, cost) for each\n3. Design a test methodology to fairly compare all three approaches\n4. Recommend one approach with full justification\n5. Identify potential failure modes specific to our UVU CS FAQ domain\n6. Propose a hybrid solution that combines strengths of multiple approaches\n\nYour answer must reference specific concepts from our curriculum and demonstrate understanding of real-world deployment considerations.",
+    "course": "NLP",
+    "type": "essay",
+    "bloomLevel": 6,
+    "contextDependency": 5,
+    "novelty": 5,
+    "tags": ["QA", "transformers", "project-based", "evaluation"],
+    "expectedAnswer": "Requires synthesis of multiple advanced concepts, practical engineering judgment, and creative problem-solving.",
+    "rubric": {
+      "keyPoints": [
+        "Thorough comparison of approaches",
+        "Realistic resource estimates",
+        "Valid test methodology",
+        "Well-justified recommendation",
+        "Domain-specific failure analysis",
+        "Creative hybrid solution"
+      ],
+      "maxScore": 60
+    }
+  },
+  {
+    "id": "nlp_019",
+    "text": "What is the difference between supervised and unsupervised learning in NLP?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["machine-learning", "basics"],
+    "expectedAnswer": "Supervised learning uses labeled data to train models for specific tasks, while unsupervised learning finds patterns in unlabeled data without explicit task guidance.",
+    "rubric": {
+      "keyPoints": ["supervised uses labels", "unsupervised finds patterns", "different use cases"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_020",
+    "text": "List three common preprocessing steps for text data.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["preprocessing", "basics"],
+    "expectedAnswer": "Common preprocessing steps include: tokenization, lowercasing, removing stop words, stemming/lemmatization, and removing punctuation.",
+    "rubric": {
+      "keyPoints": ["tokenization", "lowercasing", "stop word removal", "stemming/lemmatization"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_021",
+    "text": "Reflect on your learning journey in this NLP course by analyzing a specific moment where your understanding fundamentally shifted. Choose one assignment or lab where you initially struggled but eventually achieved a breakthrough.\n\nYour reflection should:\n1. Describe the specific technical challenge you faced\n2. Analyze what made it difficult (conceptual gaps, implementation issues, etc.)\n3. Explain the process of overcoming it - what resources, strategies, or insights helped?\n4. Connect this experience to broader themes in NLP or machine learning\n5. Identify how this learning will influence your approach to future technical challenges\n6. Propose how this assignment could be modified to better support student learning\n\nThis is not about summarizing what you learned, but deeply analyzing your metacognitive process and demonstrating growth mindset.",
+    "course": "NLP",
+    "type": "essay",
+    "bloomLevel": 5,
+    "contextDependency": 4,
+    "novelty": 5,
+    "tags": ["reflection", "metacognition", "learning"],
+    "expectedAnswer": "Requires genuine self-reflection, metacognitive awareness, and ability to connect personal experience to broader concepts.",
+    "rubric": {
+      "keyPoints": [
+        "Specific technical challenge described",
+        "Thoughtful analysis of difficulty",
+        "Process of learning explained",
+        "Connection to broader concepts",
+        "Future application identified",
+        "Constructive suggestions for assignment"
+      ],
+      "maxScore": 40
+    }
+  },
+  {
+    "id": "nlp_022",
+    "text": "What is perplexity in language modeling?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["language-models", "evaluation"],
+    "expectedAnswer": "Perplexity measures how well a language model predicts a sample - lower perplexity indicates better prediction. It's the exponential of the average negative log-likelihood.",
+    "rubric": {
+      "keyPoints": ["prediction quality measure", "lower is better", "exponential of log-likelihood"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_023",
+    "text": "Explain the concept of transfer learning in NLP.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["transfer-learning", "deep-learning"],
+    "expectedAnswer": "Transfer learning uses pre-trained models on large datasets and fine-tunes them for specific downstream tasks, leveraging learned representations to improve performance with less data.",
+    "rubric": {
+      "keyPoints": ["pre-trained models", "fine-tuning", "less data needed"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_024",
+    "text": "What is the purpose of dropout in neural networks?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["regularization", "neural-networks"],
+    "options": [
+      "Prevent overfitting by randomly dropping neurons during training",
+      "Speed up training",
+      "Reduce model size",
+      "Improve accuracy on training data"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_025",
+    "text": "Compare bag-of-words and n-gram models for text representation.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 4,
+    "contextDependency": 2,
+    "novelty": 2,
+    "tags": ["text-representation", "basics"],
+    "expectedAnswer": "Bag-of-words treats each word independently, losing word order. N-gram models capture sequences of n consecutive words, preserving some local context but increasing dimensionality.",
+    "rubric": {
+      "keyPoints": ["BOW loses order", "n-grams capture sequences", "trade-off between context and dimensionality"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_026",
+    "text": "What is the role of padding in sequence processing?",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["sequence-processing", "basics"],
+    "expectedAnswer": "Padding adds special tokens to sequences to make them the same length for batch processing in neural networks.",
+    "rubric": {
+      "keyPoints": ["makes sequences same length", "enables batch processing", "uses special tokens"],
+      "maxScore": 10
+    }
+  },
+  {
+    "id": "nlp_027",
+    "text": "Describe the difference between extractive and abstractive summarization.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 1,
+    "novelty": 2,
+    "tags": ["summarization", "NLP-tasks"],
+    "expectedAnswer": "Extractive summarization selects and combines existing sentences from the source text, while abstractive summarization generates new sentences that capture the main ideas.",
+    "rubric": {
+      "keyPoints": ["extractive uses existing sentences", "abstractive generates new text", "different complexity"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_028",
+    "text": "What is a confusion matrix used for in classification tasks?",
+    "course": "NLP",
+    "type": "multiple-choice",
+    "bloomLevel": 1,
+    "contextDependency": 1,
+    "novelty": 1,
+    "tags": ["evaluation", "classification"],
+    "options": [
+      "Visualize model predictions vs actual labels to calculate metrics like precision and recall",
+      "Store training data",
+      "Optimize hyperparameters",
+      "Generate text summaries"
+    ],
+    "correctAnswer": 0,
+    "rubric": {
+      "maxScore": 5
+    }
+  },
+  {
+    "id": "nlp_029",
+    "text": "Explain what zero-shot learning means in the context of large language models.",
+    "course": "NLP",
+    "type": "short-answer",
+    "bloomLevel": 2,
+    "contextDependency": 2,
+    "novelty": 3,
+    "tags": ["LLM", "few-shot-learning"],
+    "expectedAnswer": "Zero-shot learning is when a model performs a task without any task-specific training examples, relying only on its pre-training and the task description in the prompt.",
+    "rubric": {
+      "keyPoints": ["no task-specific examples", "relies on pre-training", "task described in prompt"],
+      "maxScore": 15
+    }
+  },
+  {
+    "id": "nlp_030",
+    "text": "Your team is developing a content moderation system for UVU's new student discussion platform. The system must detect harmful content while respecting free speech and academic discourse. You've tested GPT-4, a fine-tuned BERT classifier, and a rule-based system.\n\nDevelop a comprehensive solution:\n1. Analyze the unique challenges of content moderation in an academic context vs social media\n2. For each approach (GPT-4, BERT, rules), identify scenarios where it excels and fails\n3. Design a hybrid architecture that combines all three approaches strategically\n4. Propose a human-in-the-loop workflow for edge cases\n5. Create an evaluation framework that balances precision, recall, and fairness\n6. Address potential biases and propose mitigation strategies\n7. Reflect on the ethical implications of automated content moderation in educational settings\n\nYour answer should demonstrate technical depth, ethical awareness, and systems thinking.",
+    "course": "NLP",
+    "type": "project",
+    "bloomLevel": 6,
+    "contextDependency": 5,
+    "novelty": 5,
+    "tags": ["ethics", "content-moderation", "system-design", "project-based"],
+    "expectedAnswer": "Requires synthesis of technical NLP knowledge, ethical reasoning, practical system design, and contextual awareness.",
+    "rubric": {
+      "keyPoints": [
+        "Academic context analysis",
+        "Approach-specific strengths/weaknesses",
+        "Well-designed hybrid architecture",
+        "Practical human-in-the-loop workflow",
+        "Comprehensive evaluation framework",
+        "Thoughtful bias mitigation",
+        "Deep ethical reflection"
+      ],
+      "maxScore": 70
+    }
+  }
+]
