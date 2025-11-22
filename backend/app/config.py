@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     environment: str = "development"
     
-    # CORS (comma-separated string in .env)
-    allowed_origins: str = "http://localhost:3000,http://localhost:3001"
+    # CORS (comma-separated string in .env, * allows all origins for production)
+    allowed_origins: str = "*"
     
     # API Keys
     openrouter_api_key: str = ""

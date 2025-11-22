@@ -2,149 +2,234 @@
 
 A full-stack web application that helps faculty design AI-resistant assessments by measuring and reducing the "Exploitability Score" (ES) of their questions.
 
-![AAD Framework](https://img.shields.io/badge/Status-Demo-blue)
-![Python](https://img.shields.io/badge/Python-3.11+-green)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-
-## 🎯 Overview
+## Overview
 
 With AI tools like ChatGPT becoming ubiquitous, traditional assessments face new challenges. The AAD Framework:
 
-- **Measures vulnerability**: Calculates an Exploitability Score (ES) showing how easily AI can complete an assessment
-- **Tests with real AI**: Uses GPT-4, Claude, and Gemini to evaluate question resistance
-- **Provides recommendations**: Offers actionable advice to redesign vulnerable questions
-- **Analyzes patterns**: Statistical analysis to identify what makes questions AI-resistant
+- Measures vulnerability by calculating an Exploitability Score (ES) showing how easily AI can complete an assessment
+- Tests with real AI using 16 models including GPT-4, Claude 3.5, Gemini, Llama, and Mistral via OpenRouter API
+- Provides actionable recommendations to redesign vulnerable questions
+- Performs statistical analysis to identify what makes questions AI-resistant
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-Frontend (Next.js 14) → API Routes → Backend (FastAPI) → OpenRouter → AI Models
+Frontend (Next.js 14) ↔ Backend API (FastAPI) ↔ JSON Database
+                              ↓
+                     OpenRouter AI Service
+                 (16 models: 10 free, 6 premium)
 ```
 
-## 🚀 Quick Start
+**Key Features:**
+- All questions stored in backend database at `backend/data/questions.json`
+- Real API integration between frontend and backend
+- Persistent test results across sessions
+- Real-time AI testing with multiple models
+- Type safety with Pydantic (backend) and TypeScript (frontend)
+
+## Quick Start
 
 ### Prerequisites
 
-- **Python 3.11+** with Anaconda
-- **Node.js 18+** and npm
-- **OpenRouter API Key** (optional for demo - works without it)
+- Python 3.11+ with Anaconda
+- Node.js 18+ and npm
+- OpenRouter API Key (see DEPLOYMENT_GUIDE.md for free models)
 
 ### Backend Setup
 
 ```bash
-# Navigate to backend directory
-cd /home/qratul/rnd_projects/ai-vulnerability-education/demo_app/backend
+cd backend
 
 # Activate conda environment
 conda activate common_lt
 
-# Install Python dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# Create .env file (copy from .env.example)
+# Configure environment variables
 cp .env.example .env
-# Edit .env and add your OPENROUTER_API_KEY if you have one
-# The app works with mock data if no API key is provided
+# Edit .env and add your OPENROUTER_API_KEY
 
-# Run the backend server
+# Start server
 python main.py
-# Or use uvicorn directly:
-# uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The API will be available at `http://localhost:8000`
-- API Documentation: `http://localhost:8000/docs`
-- Health Check: `http://localhost:8000/health`
+API available at `http://localhost:8000`
+- Documentation: `http://localhost:8000/docs`
+- Health check: `http://localhost:8000/api/health`
 
 ### Frontend Setup
 
 ```bash
-# Navigate to frontend directory
-cd /home/qratul/rnd_projects/ai-vulnerability-education/demo_app/frontend
+cd frontend
 
 # Install dependencies
 npm install
 
-# Create .env.local file
+# Configure environment
 echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
 
-# Run development server
+# Start development server
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+Application available at `http://localhost:3000`
 
-## 📊 Sample Data
+## Exploitability Score (ES) Calculation
 
-The backend comes pre-loaded with 30 realistic NLP course questions:
-
-- **10 highly vulnerable** (ES > 70): Simple recall questions
-- **15 moderately vulnerable** (ES 40-70): Application/analysis questions  
-- **5 AI-resistant** (ES < 30): Project-based, context-heavy questions
-
-Examples demonstrate:
-- ✅ Generic vs course-specific context
-- ✅ Recall vs creative synthesis
-- ✅ Common vs unique scenarios
-
-## 🧮 Exploitability Score Calculation
-
-```python
+```
 ES = (0.15 × bloom_factor) + (0.25 × context_factor) + 
      (0.25 × novelty_factor) + (0.35 × ai_accuracy)
 ```
 
-Where:
-- **Bloom's Taxonomy** (1-6): 1=Remember → 6=Create
-- **Context Dependency** (1-5): 1=Generic → 5=Course-specific
-- **Novelty** (1-5): 1=Common → 5=Unique
-- **AI Accuracy** (0-100): Average performance across AI models
+**Factors:**
+- Bloom's Taxonomy (1-6): 1=Remember, 6=Create
+- Context Dependency (1-5): 1=Generic, 5=Course-specific
+- Novelty (1-5): 1=Common, 5=Unique
+- AI Accuracy (0-100): Average performance across models
 
-Lower ES = More AI-resistant ✅
+**Interpretation:**
+- 0-30: AI-Resistant
+- 30-50: Moderately Resistant
+- 50-70: Moderately Vulnerable
+- 70-100: Highly Vulnerable
 
-## 🛠️ Tech Stack
+Lower ES indicates more AI-resistant questions.
 
-### Backend
-- **FastAPI** - Modern async Python web framework
-- **Pandas/NumPy** - Data analysis
-- **SciPy** - Statistical analysis
-- **OpenRouter** - Multi-model AI testing
+## Sample Data
 
-### Frontend (Coming Soon)
-- **Next.js 14** - React framework with App Router
-- **Tailwind CSS** - Utility-first styling
-- **shadcn/ui** - High-quality components
-- **Recharts** - Data visualization
+The backend includes 30 realistic NLP course questions:
 
-## 📡 API Endpoints
+- 10 highly vulnerable (ES > 70): Simple recall questions
+- 15 moderately vulnerable (ES 40-70): Application/analysis questions
+- 5 AI-resistant (ES < 30): Project-based, context-heavy questions
+
+## Tech Stack
+
+**Backend:**
+- FastAPI - Modern async Python web framework
+- Pydantic - Data validation and settings
+- Pandas/NumPy/SciPy - Statistical analysis
+- OpenRouter - Multi-model AI access
+
+**Frontend:**
+- Next.js 14 - React framework with App Router
+- TypeScript - Type safety
+- Tailwind CSS - Utility-first styling
+- Recharts - Data visualization
+
+## API Endpoints
 
 ### Questions
-- `GET /api/questions` - List all questions (with filters)
-- `GET /api/questions/{id}` - Get single question
-- `POST /api/questions` - Create new question
-- `PUT /api/questions/{id}` - Update question
-- `DELETE /api/questions/{id}` - Delete question
+```
+GET    /api/questions              # List all questions
+GET    /api/questions/{id}         # Get single question
+POST   /api/questions              # Create question
+PUT    /api/questions/{id}         # Update question
+DELETE /api/questions/{id}         # Delete question
+```
 
 ### AI Testing
-- `POST /api/test/single` - Test question with AI models
-- `POST /api/test/batch` - Test multiple questions
-- `GET /api/test/results/{id}` - Get test results
-
-### Analysis
-- `GET /api/analysis/statistics` - Overall statistics
-- `GET /api/analysis/correlation` - Correlation matrix
-- `POST /api/analysis/regression` - Regression analysis
-- `GET /api/analysis/export?format=json|csv` - Export data
+```
+POST   /api/test/single            # Test question with AI model
+POST   /api/test/batch             # Test multiple questions
+GET    /api/test/results/{id}      # Get test results
+```
 
 ### ES Calculation
-- `POST /api/es/calculate` - Calculate ES with all criteria
-- `POST /api/es/predict` - Estimate ES from criteria only
+```
+POST   /api/es/calculate           # Calculate ES with all criteria
+POST   /api/es/predict             # Estimate ES from criteria only
+```
 
-## 🔬 Testing the Demo
+### Analysis
+```
+GET    /api/analysis/statistics    # Overall statistics
+GET    /api/analysis/correlation   # Correlation matrix
+POST   /api/analysis/regression    # Regression analysis
+GET    /api/analysis/export        # Export data (JSON/CSV)
+```
 
-1. **Start the backend**: `python main.py`
-2. **Visit API docs**: http://localhost:8000/docs
-3. **Try these examples**:
+## Available AI Models
+
+**Free Modern Models (10):**
+- Meta Llama 3.1 8B Instruct
+- Meta Llama 3.1 70B Instruct
+- Google Gemini 1.5 Flash
+- Google Gemini 1.5 Pro
+- Mistral 7B Instruct
+- Mixtral 8x7B Instruct
+- Microsoft Phi-3 Mini
+- Microsoft Phi-3 Medium
+- Alibaba Qwen 2 7B
+
+**Baseline Models (2):**
+- OpenAI GPT-3.5 Turbo
+- HuggingFace Zephyr 7B Beta
+
+**Premium Models (4):**
+- OpenAI GPT-4o
+- OpenAI GPT-4o Mini
+- Anthropic Claude 3.5 Sonnet
+- Anthropic Claude 3 Haiku
+
+## Project Structure
+
+```
+demo_app/
+├── README.md                      # This file
+├── DEPLOYMENT_GUIDE.md            # Cloud deployment instructions
+├── RENDER_NOTES.md                # Data persistence notes
+├── vercel.json                    # Vercel configuration
+├── render.yaml                    # Render configuration
+├── backend/
+│   ├── main.py                    # FastAPI entry point
+│   ├── requirements.txt           # Python dependencies
+│   ├── .env.example              # Environment template
+│   ├── app/
+│   │   ├── config.py             # Configuration
+│   │   ├── models/schemas.py     # Pydantic models
+│   │   ├── api/                  # API endpoints
+│   │   │   ├── questions.py
+│   │   │   ├── testing.py
+│   │   │   ├── es.py
+│   │   │   └── analysis.py
+│   │   ├── services/             # Business logic
+│   │   │   ├── es_calculator.py
+│   │   │   └── openrouter.py
+│   │   └── utils/
+│   │       └── database.py       # Data storage
+│   └── data/
+│       └── questions.json        # Question database
+└── frontend/
+    ├── app/
+    │   ├── layout.tsx
+    │   ├── page.tsx
+    │   └── question/[id]/
+    │       └── page.tsx          # Question detail view
+    ├── lib/
+    │   ├── api-client.ts         # API communication
+    │   └── types.ts              # TypeScript interfaces
+    └── [configuration files]
+```
+
+## Development
+
+```bash
+# Backend with auto-reload
+cd backend
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Frontend with hot reload
+cd frontend
+npm run dev
+```
+
+## Testing
+
+Visit `http://localhost:8000/docs` for interactive API documentation.
+
+**Example API calls:**
 
 ```bash
 # Get all questions
@@ -153,148 +238,62 @@ curl http://localhost:8000/api/questions
 # Get statistics
 curl http://localhost:8000/api/analysis/statistics
 
-# Calculate ES for a question
+# Calculate ES
 curl -X POST http://localhost:8000/api/es/calculate \
   -H "Content-Type: application/json" \
-  -d '{
-    "bloomLevel": 1,
-    "contextDependency": 1,
-    "novelty": 1
-  }'
+  -d '{"bloomLevel": 1, "contextDependency": 1, "novelty": 1}'
 
-# Test a question with AI (uses mock responses if no API key)
+# Test with AI model
 curl -X POST http://localhost:8000/api/test/single \
   -H "Content-Type: application/json" \
-  -d '{
-    "questionId": "nlp_001",
-    "models": ["openai/gpt-4-turbo"]
-  }'
+  -d '{"questionId": "nlp_003", "model": "meta-llama/llama-3.1-8b-instruct:free"}'
 ```
 
-## 📁 Project Structure
+## Deployment
 
-```
-demo_app/
-├── backend/
-│   ├── main.py                 # FastAPI entry point
-│   ├── requirements.txt        # Python dependencies
-│   ├── .env.example           # Environment template
-│   ├── app/
-│   │   ├── config.py          # Configuration
-│   │   ├── models/
-│   │   │   └── schemas.py     # Pydantic models
-│   │   ├── api/
-│   │   │   ├── questions.py   # Question CRUD
-│   │   │   ├── testing.py     # AI testing
-│   │   │   ├── es.py          # ES calculation
-│   │   │   └── analysis.py    # Statistical analysis
-│   │   ├── services/
-│   │   │   ├── es_calculator.py    # ES algorithm
-│   │   │   └── openrouter.py       # AI API client
-│   │   └── utils/
-│   │       └── database.py    # In-memory database
-│   └── data/
-│       ├── sample_questions.json   # Sample data
-│       └── questions.json          # Runtime data
-│
-└── frontend/                  # (To be created)
-    └── [Next.js app structure]
-```
+See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for complete instructions on deploying to:
+- Vercel (Frontend)
+- Render (Backend)
 
-## 🎨 Key Features
+Both platforms offer free tiers suitable for this application.
 
-### ✅ Implemented (Backend)
-- [x] Question CRUD operations
-- [x] ES calculation algorithm
-- [x] AI testing with OpenRouter (with mock fallback)
-- [x] Response scoring
-- [x] Statistical analysis (correlations, regression)
-- [x] Data export (JSON/CSV)
-- [x] Sample dataset (30 NLP questions)
-- [x] RESTful API with FastAPI
-- [x] API documentation (Swagger)
+## Environment Variables
 
-### 🚧 To Do (Frontend - Next Phase)
-- [ ] Dashboard with statistics and charts
-- [ ] Question analyzer (4-step workflow)
-- [ ] AI-resistant toolkit
-- [ ] Interactive ES calculator
-- [ ] Batch testing interface
-- [ ] Data visualization components
-
-## 🔐 Environment Variables
-
-### Backend (.env)
+**Backend (.env):**
 ```bash
-OPENROUTER_API_KEY=your_key_here  # Optional - uses mocks if not provided
-ALLOWED_ORIGINS=http://localhost:3000
-DATABASE_URL=sqlite:///./aad.db
-ENVIRONMENT=development
+OPENROUTER_API_KEY=sk-or-v1-your-api-key-here
+ALLOWED_ORIGINS=*
+ENVIRONMENT=production
 ```
 
-### Frontend (.env.local)
+**Frontend (.env.local or .env.production):**
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
 ```
 
-## 🚀 Deployment
+## Key Insights
 
-### Backend (Railway/Render)
-1. Connect GitHub repository
-2. Set environment variables
-3. Use start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+From statistical analysis of sample data:
 
-### Frontend (Vercel)
-1. Import repository
-2. Set build command: `npm run build`
-3. Set environment variables
+- **Bloom's Level** has strong negative correlation with ES
+- **Context Dependency** significantly reduces AI exploitability
+- **Novelty** makes questions harder for AI to answer
 
-## 🧪 Development
+**Recommendation:** To create AI-resistant assessments, design questions that:
+- Target Bloom's levels 4-6 (Analyze, Evaluate, Create)
+- Incorporate course-specific projects and context
+- Use unique institutional scenarios
 
-```bash
-# Run backend with auto-reload
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+## License
 
-# Run frontend with hot reload
-npm run dev
+MIT License - See LICENSE file for details.
 
-# Format Python code
-black app/
+## Notes
 
-# Lint Python code
-flake8 app/
-```
-
-## 📚 Learn More
-
-- **Bloom's Taxonomy**: [Anderson & Krathwohl (2001)](https://en.wikipedia.org/wiki/Bloom%27s_taxonomy)
-- **AI in Education**: Implications for assessment design
-- **FastAPI**: https://fastapi.tiangolo.com/
-- **Next.js**: https://nextjs.org/
-
-## 🤝 Contributing
-
-This is a research demo project. Contributions welcome!
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
-## 👥 Authors
-
-Built for educational research on AI-resistant assessment design.
-
----
-
-**Note**: This is a demonstration application. For production use, implement:
-- Real database (PostgreSQL)
-- Authentication & authorization
-- Rate limiting
-- Caching
+This is a demonstration application. For production deployment, consider:
+- PostgreSQL or another persistent database (see RENDER_NOTES.md)
+- Authentication and authorization
+- Rate limiting for API endpoints
+- Caching for improved performance
 - Comprehensive error handling
 - Unit and integration tests

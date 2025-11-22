@@ -28,71 +28,6 @@ export default function QuestionDetailPage() {
     try {
       const questionId = Array.isArray(params.id) ? params.id[0] : params.id;
       const data = await apiClient.getQuestion(questionId) as Question;
-      
-      // Initialize with saved results from localStorage
-      const savedResults = localStorage.getItem(`ai_results_${questionId}`);
-      if (savedResults) {
-        data.aiTestResults = JSON.parse(savedResults);
-      } else if (!data.aiTestResults || data.aiTestResults.length === 0) {
-        // Create FIXED initial dummy results for the 4 main models
-        const correctAns = typeof data.correctAnswer === 'number' 
-          ? String.fromCharCode(65 + data.correctAnswer)
-          : (data.correctAnswer || 'A');
-        
-        // Deterministic wrong answers based on question ID hash
-        const hashCode = questionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const allOptions = ['A', 'B', 'C', 'D'];
-        const wrongOptions = allOptions.filter(opt => opt !== correctAns);
-        
-        // Fixed results - will be same every time for this question
-        const mockResults = [
-          {
-            model: 'gpt-4',
-            selectedOption: wrongOptions[hashCode % wrongOptions.length], // Deterministic wrong
-            isCorrect: false,
-            accuracy: 0,
-            confidence: 75,
-            response: 'Based on my analysis, I believe the answer is ' + wrongOptions[hashCode % wrongOptions.length],
-            coherence: 85,
-            timestamp: new Date(Date.now() - 86400000).toISOString(),
-          },
-          {
-            model: 'gpt-3.5-turbo',
-            selectedOption: correctAns, // Always correct for this model
-            isCorrect: true,
-            accuracy: 100,
-            confidence: 82,
-            response: 'The correct answer is ' + correctAns,
-            coherence: 78,
-            timestamp: new Date(Date.now() - 82800000).toISOString(),
-          },
-          {
-            model: 'claude-3-opus',
-            selectedOption: wrongOptions[(hashCode + 1) % wrongOptions.length], // Deterministic wrong
-            isCorrect: false,
-            accuracy: 0,
-            confidence: 92,
-            response: 'After careful consideration, I select ' + wrongOptions[(hashCode + 1) % wrongOptions.length],
-            coherence: 95,
-            timestamp: new Date(Date.now() - 79200000).toISOString(),
-          },
-          {
-            model: 'gemini-pro',
-            selectedOption: wrongOptions[(hashCode + 2) % wrongOptions.length], // Deterministic wrong
-            isCorrect: false,
-            accuracy: 0,
-            confidence: 68,
-            response: 'My answer is ' + wrongOptions[(hashCode + 2) % wrongOptions.length],
-            coherence: 72,
-            timestamp: new Date(Date.now() - 75600000).toISOString(),
-          },
-        ];
-        
-        data.aiTestResults = mockResults;
-        // Save to localStorage
-        localStorage.setItem(`ai_results_${questionId}`, JSON.stringify(mockResults));
-      }
-      
       setQuestion(data);
     } catch (error) {
       console.error('Failed to load question:', error);
@@ -201,6 +136,7 @@ export default function QuestionDetailPage() {
           metrics={metrics} 
           correctAnswer={correctAnswerStr}
           questionId={question.id}
+          onResultsUpdate={loadQuestion}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -280,65 +216,72 @@ function ScoreCard({ metrics }: { metrics: any }) {
   );
 }
 
-function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, questionId }: { 
+function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, questionId, onResultsUpdate }: { 
   aiResults: any[]; 
   metrics: any; 
   correctAnswer: string;
   questionId: string;
+  onResultsUpdate: () => void;
 }) {
   const [testing, setTesting] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('gpt-4');
+  const [selectedModel, setSelectedModel] = useState('meta-llama/llama-3.1-8b-instruct:free');
   const [aiResults, setAiResults] = useState(initialResults);
   
+  // Update aiResults when initialResults changes
+  useEffect(() => {
+    setAiResults(initialResults);
+  }, [initialResults]);
+  
   const availableModels = [
-    { id: 'gpt-4', name: 'GPT-4', provider: 'OpenAI' },
-    { id: 'gpt-3.5-turbo', name: 'GPT-3.5', provider: 'OpenAI' },
-    { id: 'claude-3-opus', name: 'Claude 3 Opus', provider: 'Anthropic' },
-    { id: 'claude-3-sonnet', name: 'Claude 3 Sonnet', provider: 'Anthropic' },
-    { id: 'gemini-pro', name: 'Gemini Pro', provider: 'Google' },
-    { id: 'llama-3-70b', name: 'Llama 3 70B', provider: 'Meta' },
+    // Meta Llama - FREE & Modern
+    { id: 'meta-llama/llama-3.1-8b-instruct:free', name: 'Llama 3.1 8B (Free)', provider: 'Meta', category: 'free-modern' },
+    { id: 'meta-llama/llama-3.1-70b-instruct:free', name: 'Llama 3.1 70B (Free)', provider: 'Meta', category: 'free-modern' },
+    { id: 'meta-llama/llama-3.2-3b-instruct:free', name: 'Llama 3.2 3B (Free)', provider: 'Meta', category: 'free-modern' },
+    
+    // Google Gemini - FREE & Modern
+    { id: 'google/gemini-flash-1.5', name: 'Gemini 1.5 Flash (Free)', provider: 'Google', category: 'free-modern' },
+    { id: 'google/gemini-pro-1.5', name: 'Gemini 1.5 Pro (Free)', provider: 'Google', category: 'free-modern' },
+    
+    // Mistral - FREE
+    { id: 'mistralai/mistral-7b-instruct:free', name: 'Mistral 7B (Free)', provider: 'Mistral AI', category: 'free-modern' },
+    { id: 'mistralai/mixtral-8x7b-instruct:free', name: 'Mixtral 8x7B (Free)', provider: 'Mistral AI', category: 'free-modern' },
+    
+    // Microsoft Phi - FREE & Small but Smart
+    { id: 'microsoft/phi-3-mini-128k-instruct:free', name: 'Phi-3 Mini (Free)', provider: 'Microsoft', category: 'free-modern' },
+    { id: 'microsoft/phi-3-medium-128k-instruct:free', name: 'Phi-3 Medium (Free)', provider: 'Microsoft', category: 'free-modern' },
+    
+    // Qwen - FREE & Modern
+    { id: 'qwen/qwen-2-7b-instruct:free', name: 'Qwen 2 7B (Free)', provider: 'Alibaba', category: 'free-modern' },
+    
+    // OLD & WEAK Models - FREE (for baseline comparison)
+    { id: 'openai/gpt-3.5-turbo', name: 'GPT-3.5 Turbo (Old, Weak)', provider: 'OpenAI Legacy', category: 'old-weak' },
+    { id: 'huggingfaceh4/zephyr-7b-beta:free', name: 'Zephyr 7B Beta (Old, Free)', provider: 'HuggingFace', category: 'old-weak' },
+    
+    // Paid but popular (for reference)
+    { id: 'openai/gpt-4o', name: 'GPT-4o (Paid)', provider: 'OpenAI', category: 'paid' },
+    { id: 'openai/gpt-4o-mini', name: 'GPT-4o Mini (Paid)', provider: 'OpenAI', category: 'paid' },
+    { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet (Paid)', provider: 'Anthropic', category: 'paid' },
+    { id: 'anthropic/claude-3-haiku', name: 'Claude 3 Haiku (Paid)', provider: 'Anthropic', category: 'paid' },
   ];
 
   const handleTestModel = async () => {
     setTesting(true);
     
-    // Simulate AI test with random answer
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const options = ['A', 'B', 'C', 'D'];
-    const randomAnswer = options[Math.floor(Math.random() * options.length)];
-    const isCorrect = randomAnswer === correctAnswer;
-    
-    const newResult = {
-      model: selectedModel,
-      selectedOption: randomAnswer,
-      isCorrect: isCorrect,
-      accuracy: isCorrect ? 100 : 0,
-      confidence: Math.floor(Math.random() * 30) + 70, // 70-100%
-      response: `AI selected option ${randomAnswer}`,
-      coherence: Math.floor(Math.random() * 20) + 75,
-      timestamp: new Date().toISOString(),
-    };
-    
-    // Check if model already tested - replace instead of add
-    const existingIndex = aiResults.findIndex(r => r.model === selectedModel);
-    let updatedResults;
-    
-    if (existingIndex !== -1) {
-      // Replace existing result
-      updatedResults = [...aiResults];
-      updatedResults[existingIndex] = newResult;
-    } else {
-      // Add new result
-      updatedResults = [...aiResults, newResult];
+    try {
+      // Call the API to test the question
+      const response = await apiClient.testQuestion(questionId, [selectedModel]) as any;
+      
+      // Reload the entire question to get updated results and ES
+      if (response.testResults && response.testResults.length > 0) {
+        // Trigger a reload of the question data
+        onResultsUpdate();
+      }
+    } catch (error) {
+      console.error('Failed to test question:', error);
+      alert('Failed to test question. Please try again.');
+    } finally {
+      setTesting(false);
     }
-    
-    setAiResults(updatedResults);
-    
-    // Save to localStorage
-    localStorage.setItem(`ai_results_${questionId}`, JSON.stringify(updatedResults));
-    
-    setTesting(false);
   };
 
   return (
@@ -348,7 +291,7 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
           <Zap className="w-5 h-5 text-indigo-600" strokeWidth={1.5} />
           <div>
             <h2 className="text-base font-semibold text-gray-900">AI Vulnerability Test</h2>
-            <p className="text-xs text-gray-500">Models tested: {aiResults.length}</p>
+            <p className="text-xs text-gray-500">Models tested: {aiResults.length} • {availableModels.length} models available (12 free)</p>
           </div>
         </div>
         <div className={`px-3 py-1.5 rounded-lg text-sm font-bold ${
@@ -369,9 +312,13 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
         ) : (
           aiResults.map((result, idx) => {
             const modelName = result.model.split('/').pop()?.replace('-', ' ') || result.model;
-            const isCorrect = result.accuracy === 100 || result.isCorrect;
-            const selectedAnswer = result.selectedOption || '?';
-            const isMatch = selectedAnswer === correctAnswer;
+            
+            // Handle both old and new result formats
+            const isCorrect = result.isCorrect !== undefined ? result.isCorrect : (result.accuracy === 100);
+            const selectedAnswer = result.selectedOption || 
+                                  (result.accuracy === 100 ? correctAnswer : '?');
+            const isMatch = selectedAnswer !== '?' && selectedAnswer === correctAnswer;
+            const confidence = result.confidence || result.accuracy || 0;
             
             return (
               <div
@@ -379,6 +326,8 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
                 className={`relative p-3 rounded-xl border-2 transition-all hover:scale-105 shadow-md ${
                   isMatch
                     ? 'bg-transparent border-red-500 shadow-red-200'
+                    : selectedAnswer === '?'
+                    ? 'bg-transparent border-gray-400 shadow-gray-200'
                     : 'bg-transparent border-emerald-500 shadow-emerald-200'
                 } hover:shadow-lg`}
               >
@@ -390,9 +339,11 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
                   <div className={`px-2 py-1 rounded-md text-[10px] font-black ${
                     isMatch 
                       ? 'bg-red-100 text-red-900 border border-red-400' 
+                      : selectedAnswer === '?'
+                      ? 'bg-gray-100 text-gray-700 border border-gray-400'
                       : 'bg-emerald-100 text-emerald-900 border border-emerald-400'
                   }`}>
-                    {isMatch ? 'SOLVED' : 'SAFE'}
+                    {isMatch ? 'SOLVED' : selectedAnswer === '?' ? 'OLD' : 'SAFE'}
                   </div>
                 </div>
                 
@@ -400,7 +351,9 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-baseline gap-1">
                     <span className={`text-4xl font-black leading-none ${
-                      isMatch ? 'text-red-700' : 'text-emerald-700'
+                      isMatch ? 'text-red-700' : 
+                      selectedAnswer === '?' ? 'text-gray-500' :
+                      'text-emerald-700'
                     }`}>
                       {selectedAnswer}
                     </span>
@@ -408,16 +361,22 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
                 </div>
                 
                 {/* Confidence bar */}
-                {result.confidence && (
+                {confidence > 0 && (
                   <div className="mt-2">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-[9px] text-gray-600 font-medium">Confidence</span>
-                      <span className="text-[9px] font-bold text-gray-700">{result.confidence}%</span>
+                      <span className="text-[9px] text-gray-600 font-medium">
+                        {result.confidence ? 'Confidence' : 'Accuracy'}
+                      </span>
+                      <span className="text-[9px] font-bold text-gray-700">{confidence.toFixed(0)}%</span>
                     </div>
                     <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                       <div 
-                        className={`h-full ${isMatch ? 'bg-red-600' : 'bg-emerald-600'}`}
-                        style={{ width: `${result.confidence}%` }}
+                        className={`h-full ${
+                          isMatch ? 'bg-red-600' : 
+                          selectedAnswer === '?' ? 'bg-gray-400' :
+                          'bg-emerald-600'
+                        }`}
+                        style={{ width: `${confidence}%` }}
                       />
                     </div>
                   </div>
@@ -443,36 +402,64 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
 
       {/* Test New Model Section */}
       <div className="border-t border-gray-200 pt-4">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
-            className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="flex-1 px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
           >
-            {availableModels.map((model) => (
-              <option key={model.id} value={model.id}>
-                {model.name} ({model.provider})
-              </option>
-            ))}
+            <optgroup label="🆓 FREE - Modern & Powerful (Recommended)">
+              {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Meta').map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label="🆓 FREE - Google Gemini">
+              {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Google').map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label="🆓 FREE - Mistral AI">
+              {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Mistral AI').map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label="🆓 FREE - Microsoft Phi & Others">
+              {availableModels.filter(m => m.category === 'free-modern' && (m.provider === 'Microsoft' || m.provider === 'Alibaba')).map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label="📉 OLD & WEAK - Free (Baseline Comparison)">
+              {availableModels.filter(m => m.category === 'old-weak').map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label="💰 PAID - Premium Models">
+              {availableModels.filter(m => m.category === 'paid').map((model) => (
+                <option key={model.id} value={model.id}>{model.name}</option>
+              ))}
+            </optgroup>
           </select>
           <button
             onClick={handleTestModel}
             disabled={testing}
-            className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+            className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 min-w-[140px]"
           >
             {testing ? (
               <>
-                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                 Testing...
               </>
             ) : (
               <>
-                <Zap className="w-3 h-3" strokeWidth={2} />
+                <Zap className="w-4 h-4" strokeWidth={2} />
                 Test Model
               </>
             )}
           </button>
         </div>
+        <p className="text-xs text-gray-500 mt-2">
+          💡 <strong>Tip:</strong> Free models (🆓) have no cost limits. Try <strong>Llama 3.1 70B</strong> or <strong>Gemini 1.5 Pro</strong> for best results! Old models (📉) are weaker for baseline comparison.
+        </p>
       </div>
     </div>
   );

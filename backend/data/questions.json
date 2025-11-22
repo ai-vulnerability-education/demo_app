@@ -35,25 +35,51 @@
     "bloomLevel": 2,
     "contextDependency": 1,
     "novelty": 2,
-    "exploitabilityScore": 43.35,
+    "exploitabilityScore": 42.825,
     "aiTestResults": [
       {
         "model": "anthropic/claude-3-opus",
         "accuracy": 6.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:02:35.129262"
+        "timestamp": "2025-10-28T13:02:35.129262",
+        "selectedOption": null,
+        "isCorrect": null,
+        "confidence": null
       },
       {
         "model": "anthropic/claude-3-sonnet",
         "accuracy": 6.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:02:46.659512"
+        "timestamp": "2025-10-28T13:02:46.659512",
+        "selectedOption": null,
+        "isCorrect": null,
+        "confidence": null
+      },
+      {
+        "model": "mistralai/mistral-7b-instruct:free",
+        "accuracy": 0.0,
+        "coherence": 60.0,
+        "response": " ",
+        "timestamp": "2025-10-29T14:55:39.080912",
+        "selectedOption": null,
+        "isCorrect": null,
+        "confidence": 80.0
+      },
+      {
+        "model": "google/gemini-flash-1.5",
+        "accuracy": 6.0,
+        "coherence": 60.0,
+        "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
+        "timestamp": "2025-10-29T14:55:46.687073",
+        "selectedOption": null,
+        "isCorrect": null,
+        "confidence": 80.0
       }
     ],
     "createdAt": "2025-10-28T12:31:44.865005",
-    "updatedAt": "2025-10-28T13:02:46.659662",
+    "updatedAt": "2025-10-29T14:55:46.687227",
     "tags": [
       "preprocessing",
       "morphology"
@@ -78,39 +104,61 @@
     "bloomLevel": 2,
     "contextDependency": 1,
     "novelty": 1,
-    "exploitabilityScore": 62.5,
+    "exploitabilityScore": 80.0,
     "aiTestResults": [
       {
         "model": "openai/gpt-4",
-        "accuracy": 50.0,
+        "accuracy": 100.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:09:07.384830"
+        "timestamp": "2025-10-28T20:46:27.473901",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
       },
       {
         "model": "openai/gpt-3.5-turbo",
-        "accuracy": 50.0,
+        "accuracy": 100.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:09:11.993251"
+        "timestamp": "2025-10-29T12:48:50.419029",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
       },
       {
         "model": "anthropic/claude-3-opus",
-        "accuracy": 50.0,
+        "accuracy": 100.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:09:18.737444"
+        "timestamp": "2025-10-28T20:44:49.199820",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
       },
       {
         "model": "google/gemini-pro",
-        "accuracy": 50.0,
+        "accuracy": 100.0,
         "coherence": 60.0,
         "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
-        "timestamp": "2025-10-28T13:09:30.199969"
+        "timestamp": "2025-10-28T20:44:53.546953",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
+      },
+      {
+        "model": "microsoft/phi-3-mini-128k-instruct:free",
+        "accuracy": 100.0,
+        "coherence": 60.0,
+        "response": "[This is a simulated AI response for demonstration purposes] The question addresses important concepts in the field. A thorough answer would consider multiple perspectives and provide evidence-based reasoning.",
+        "timestamp": "2025-10-29T12:48:56.754057",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
       }
     ],
     "createdAt": "2025-10-28T12:31:44.865011",
-    "updatedAt": "2025-10-28T13:09:30.200152",
+    "updatedAt": "2025-10-29T12:48:56.754259",
     "tags": [
       "transformers",
       "BERT"
@@ -194,10 +242,51 @@
     "bloomLevel": 1,
     "contextDependency": 1,
     "novelty": 1,
-    "exploitabilityScore": 46.5,
-    "aiTestResults": null,
+    "exploitabilityScore": 81.5,
+    "aiTestResults": [
+      {
+        "model": "openai/gpt-4",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-28T20:47:11.451419",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      },
+      {
+        "model": "openai/gpt-3.5-turbo",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-28T20:33:18.486178",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      },
+      {
+        "model": "anthropic/claude-3-sonnet",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-28T20:33:23.657876",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      },
+      {
+        "model": "meta-llama/llama-3-70b",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-28T20:33:28.295582",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      }
+    ],
     "createdAt": "2025-10-28T12:31:44.865027",
-    "updatedAt": "2025-10-28T12:31:44.865027",
+    "updatedAt": "2025-10-28T20:47:11.451658",
     "tags": [
       "embeddings",
       "basics"
@@ -338,10 +427,31 @@
     "bloomLevel": 1,
     "contextDependency": 1,
     "novelty": 1,
-    "exploitabilityScore": 46.5,
-    "aiTestResults": null,
+    "exploitabilityScore": 81.5,
+    "aiTestResults": [
+      {
+        "model": "meta-llama/llama-3.1-8b-instruct:free",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-29T12:51:36.456330",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      },
+      {
+        "model": "openai/gpt-3.5-turbo",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-29T12:51:53.422503",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      }
+    ],
     "createdAt": "2025-10-28T12:31:44.865058",
-    "updatedAt": "2025-10-28T12:31:44.865058",
+    "updatedAt": "2025-10-29T12:51:53.422692",
     "tags": [
       "RNN",
       "LSTM",
@@ -716,10 +826,41 @@
     "bloomLevel": 1,
     "contextDependency": 1,
     "novelty": 1,
-    "exploitabilityScore": 46.5,
-    "aiTestResults": null,
+    "exploitabilityScore": 81.5,
+    "aiTestResults": [
+      {
+        "model": "openai/gpt-3.5-turbo",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-29T14:53:22.518858",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      },
+      {
+        "model": "mistralai/mistral-7b-instruct:free",
+        "accuracy": 100.0,
+        "coherence": 60.0,
+        "response": " A",
+        "timestamp": "2025-10-29T14:53:43.329479",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 80.0
+      },
+      {
+        "model": "meta-llama/llama-3.1-70b-instruct:free",
+        "accuracy": 100.0,
+        "coherence": 80.0,
+        "response": "Based on the question, here is a comprehensive answer: [This is a simulated AI response for demo purposes. In production, this would be replaced with actual AI model output.] The concept can be explained by understanding its fundamental principles and applications in the field. Key points include theoretical foundations, practical implementations, and real-world examples.",
+        "timestamp": "2025-10-29T14:53:49.088919",
+        "selectedOption": "A",
+        "isCorrect": true,
+        "confidence": 70.0
+      }
+    ],
     "createdAt": "2025-10-28T12:31:44.865120",
-    "updatedAt": "2025-10-28T12:31:44.865121",
+    "updatedAt": "2025-10-29T14:53:49.089128",
     "tags": [
       "regularization",
       "neural-networks"

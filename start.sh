@@ -1,32 +1,23 @@
 #!/bin/bash
-# Quick start script - runs both backend and frontend
+# Quick start script for AAD Framework backend
 
-echo "🚀 Starting AAD Framework..."
+echo "Starting AAD Framework Backend..."
 
-# Get the script directory
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Start backend
-echo "📡 Starting backend server..."
 cd "$DIR/backend"
 
-# Activate conda and start backend in background
 eval "$(conda shell.bash hook)"
 conda activate common_lt
 
-# Check if dependencies are installed
 if ! python -c "import fastapi" 2>/dev/null; then
-    echo "📥 Installing backend dependencies..."
+    echo "Installing backend dependencies..."
     pip install -r requirements.txt
 fi
 
-python main.py &
-BACKEND_PID=$!
-
-echo "✅ Backend started (PID: $BACKEND_PID)"
-echo "📚 API Documentation: http://localhost:8000/docs"
+echo "Backend server starting..."
+echo "API Documentation: http://localhost:8000/docs"
+echo "Press Ctrl+C to stop"
 echo ""
-echo "Press Ctrl+C to stop all servers"
 
-# Wait for interrupt
-wait $BACKEND_PID
+python main.py

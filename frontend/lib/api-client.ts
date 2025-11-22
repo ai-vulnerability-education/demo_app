@@ -105,6 +105,10 @@ export class APIClient {
       body: JSON.stringify({ questionId, models }),
     });
   }
+
+  async getTestResults(questionId: string) {
+    return this.request(`/api/test/results/${questionId}`);
+  }
 }
 
 export const apiClient = new APIClient();

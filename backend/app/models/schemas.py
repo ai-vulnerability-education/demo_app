@@ -13,6 +13,9 @@ class AITestResult(BaseModel):
     coherence: float = Field(ge=0, le=100, description="Coherence score 0-100")
     response: str
     timestamp: datetime = Field(default_factory=datetime.now)
+    selectedOption: Optional[str] = None  # For multiple choice: 'A', 'B', 'C', etc.
+    isCorrect: Optional[bool] = None  # Whether the answer was correct
+    confidence: Optional[float] = Field(None, ge=0, le=100, description="Confidence score 0-100")
 
 
 class Question(BaseModel):
@@ -40,7 +43,7 @@ class Question(BaseModel):
     expectedAnswer: Optional[str] = None
     rubric: Optional[dict] = None
     options: Optional[List[str]] = None  # For multiple choice
-    correctAnswer: Optional[int] = None  # Index for multiple choice
+    correctAnswer: Optional[str | int] = None  # Can be index (0,1,2) or letter ('A','B','C')
 
 
 class QuestionCreate(BaseModel):
@@ -55,7 +58,7 @@ class QuestionCreate(BaseModel):
     expectedAnswer: Optional[str] = None
     rubric: Optional[dict] = None
     options: Optional[List[str]] = None
-    correctAnswer: Optional[int] = None
+    correctAnswer: Optional[str | int] = None  # Can be index or letter
 
 
 class QuestionUpdate(BaseModel):
