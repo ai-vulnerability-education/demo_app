@@ -27,7 +27,7 @@
 Click "Add variables":
 
 ```
-OPENROUTER_API_KEY=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
+OPENROUTER_API_KEY=your-openrouter-api-key-here
 ALLOWED_ORIGINS=*
 ENVIRONMENT=production
 ```
