@@ -21,6 +21,24 @@ With AI tools like ChatGPT becoming ubiquitous, traditional assessments face new
 
 ## Architecture
 
+### Original Framework Architecture
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Backend as FastAPI Backend
+    participant AI as OpenRouter API<br/>(16 AI Models)
+
+    User->>Backend: Submit question for analysis
+    Backend->>Backend: Calculate Exploitability Score (ES)
+    Backend->>AI: Test with multiple AI models
+    AI-->>Backend: Return responses & metrics
+    Backend->>Backend: Aggregate results & recommendations
+    Backend-->>User: Return ES + insights
+```
+
+### Demo App Architecture (Current Implementation)
+
 ```mermaid
 graph TB
     subgraph "Frontend - Vercel"
@@ -45,6 +63,40 @@ graph TB
     style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
     style C fill:#f3e8ff,stroke:#a855f7,stroke-width:2px
     style D fill:#dcfce7,stroke:#10b981,stroke-width:2px
+```
+
+**Demo App Sequence Flow:**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend as Next.js Frontend<br/>(Vercel)
+    participant Backend as FastAPI Backend<br/>(Railway)
+    participant DB as JSON Database
+    participant AI as OpenRouter API
+
+    User->>Frontend: Browse questions
+    Frontend->>Backend: GET /api/questions
+    Backend->>DB: Read questions.json
+    DB-->>Backend: Return questions
+    Backend-->>Frontend: JSON response
+    Frontend-->>User: Display question list
+
+    User->>Frontend: View question details
+    Frontend->>Backend: GET /api/questions/{id}
+    Backend->>DB: Fetch question data
+    DB-->>Backend: Question + ES metrics
+    Backend-->>Frontend: Detailed question data
+    Frontend-->>User: Show ES breakdown
+
+    User->>Frontend: Run AI test
+    Frontend->>Backend: POST /api/testing/run
+    Backend->>AI: Send prompts to 16 models
+    AI-->>Backend: Model responses
+    Backend->>Backend: Calculate correctness
+    Backend->>DB: Save results
+    Backend-->>Frontend: Test results
+    Frontend-->>User: Display AI performance
 ```
 
 **Key Features:**
