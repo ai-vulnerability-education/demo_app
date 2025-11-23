@@ -15,6 +15,9 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
 
+// Force dynamic rendering to prevent 404 on Vercel
+export const dynamic = 'force-dynamic';
+
 export default function QuestionDetailPage() {
   const params = useParams();
   const [question, setQuestion] = useState<Question | null>(null);
