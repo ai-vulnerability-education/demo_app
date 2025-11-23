@@ -2,6 +2,14 @@
 
 A full-stack web application that helps faculty design AI-resistant assessments by measuring and reducing the "Exploitability Score" (ES) of their questions.
 
+## Live Demo
+
+- **Frontend:** <https://ai-vulnerability-edu.vercel.app>
+- **Sample Question:** <https://ai-vulnerability-edu.vercel.app/question/nlp_003>
+- **Backend API:** <https://ai-vulnerability-edu.up.railway.app>
+- **API Health:** <https://ai-vulnerability-edu.up.railway.app/health>
+- **API Documentation:** <https://ai-vulnerability-edu.up.railway.app/docs>
+
 ## Overview
 
 With AI tools like ChatGPT becoming ubiquitous, traditional assessments face new challenges. The AAD Framework:
@@ -13,11 +21,30 @@ With AI tools like ChatGPT becoming ubiquitous, traditional assessments face new
 
 ## Architecture
 
-```
-Frontend (Next.js 14) ↔ Backend API (FastAPI) ↔ JSON Database
-                              ↓
-                     OpenRouter AI Service
-                 (16 models: 10 free, 6 premium)
+```mermaid
+graph TB
+    subgraph "Frontend - Vercel"
+        A[Next.js 14 App<br/>TypeScript + Tailwind]
+    end
+    
+    subgraph "Backend - Railway"
+        B[FastAPI Server<br/>Python 3.11]
+        C[(JSON Database<br/>questions.json)]
+    end
+    
+    subgraph "AI Services"
+        D[OpenRouter API<br/>16+ Models]
+    end
+    
+    A -->|REST API| B
+    B -->|Read/Write| C
+    B -->|AI Testing| D
+    D -->|Responses| B
+    
+    style A fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px
+    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style C fill:#f3e8ff,stroke:#a855f7,stroke-width:2px
+    style D fill:#dcfce7,stroke:#10b981,stroke-width:2px
 ```
 
 **Key Features:**
