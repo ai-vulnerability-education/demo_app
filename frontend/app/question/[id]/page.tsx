@@ -194,22 +194,59 @@ function QuestionCard({ question }: { question: Question }) {
 }
 
 function ScoreCard({ metrics }: { metrics: any }) {
+  // Determine score color and gradient based on value
+  const getScoreStyles = (score: number) => {
+    if (score < 30) return {
+      text: 'text-emerald-600',
+      bg: 'from-emerald-500/10 via-purple-400/5 to-transparent',
+      glow: 'shadow-purple-200/30',
+      border: 'border-purple-200/40',
+      iconBg: 'from-emerald-500/15 to-purple-500/10'
+    };
+    if (score < 70) return {
+      text: 'text-amber-600',
+      bg: 'from-amber-500/10 via-purple-400/5 to-transparent',
+      glow: 'shadow-purple-200/30',
+      border: 'border-purple-200/40',
+      iconBg: 'from-amber-500/15 to-purple-500/10'
+    };
+    return {
+      text: 'text-red-600',
+      bg: 'from-red-500/10 via-purple-400/5 to-transparent',
+      glow: 'shadow-purple-200/30',
+      border: 'border-purple-200/40',
+      iconBg: 'from-red-500/15 to-purple-500/10'
+    };
+  };
+
+  const styles = getScoreStyles(metrics.finalScore);
+
   return (
     <div className="lg:col-span-1">
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-5 text-white shadow-lg">
-        <div className="flex items-center gap-2 mb-3">
-          <Gauge className="w-5 h-5" strokeWidth={1.5} />
-          <h3 className="text-sm font-medium opacity-90">Exploitability Score</h3>
-        </div>
-        <div className="text-center my-4">
-          <div className="text-5xl font-bold mb-1">{metrics.finalScore}</div>
-          <div className="text-xs opacity-75">out of 100</div>
-        </div>
-        <div className="space-y-2 text-xs">
-          <ScoreContribution label="Cognitive" value={metrics.cognitive.score} weight={30} />
-          <ScoreContribution label="AI Resistance" value={metrics.aiResistance.score} weight={35} />
-          <ScoreContribution label="Psychometric" value={metrics.psychometric.score} weight={20} />
-          <ScoreContribution label="Security" value={metrics.security.score} weight={15} />
+      <div className={`relative bg-white/85 backdrop-blur-xl rounded-xl p-5 border ${styles.border} shadow-md ${styles.glow} hover:shadow-lg transition-all duration-300 overflow-hidden`}>
+        {/* Gradient overlay */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${styles.bg} pointer-events-none`} />
+        
+        {/* Content */}
+        <div className="relative">
+          <div className="flex items-center gap-2 mb-3">
+            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${styles.iconBg} border ${styles.border}`}>
+              <Gauge className={`w-4 h-4 ${styles.text}`} strokeWidth={2} />
+            </div>
+            <h3 className="text-sm font-semibold text-gray-900">Exploitability Score</h3>
+          </div>
+          <div className="text-center my-5">
+            <div className={`text-6xl font-black mb-1 ${styles.text}`}>
+              {metrics.finalScore}
+            </div>
+            <div className="text-xs text-gray-500 font-medium">out of 100</div>
+          </div>
+          <div className="space-y-2.5 text-xs">
+            <ScoreContribution label="Cognitive" value={metrics.cognitive.score} weight={30} />
+            <ScoreContribution label="AI Resistance" value={metrics.aiResistance.score} weight={35} />
+            <ScoreContribution label="Psychometric" value={metrics.psychometric.score} weight={20} />
+            <ScoreContribution label="Security" value={metrics.security.score} weight={15} />
+          </div>
         </div>
       </div>
     </div>
@@ -408,32 +445,32 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
             onChange={(e) => setSelectedModel(e.target.value)}
             className="flex-1 px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
           >
-            <optgroup label="🆓 FREE - Modern & Powerful (Recommended)">
+            <optgroup label="FREE - Modern & Powerful (Recommended)">
               {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Meta').map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </optgroup>
-            <optgroup label="🆓 FREE - Google Gemini">
+            <optgroup label="FREE - Google Gemini">
               {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Google').map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </optgroup>
-            <optgroup label="🆓 FREE - Mistral AI">
+            <optgroup label="FREE - Mistral AI">
               {availableModels.filter(m => m.category === 'free-modern' && m.provider === 'Mistral AI').map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </optgroup>
-            <optgroup label="🆓 FREE - Microsoft Phi & Others">
+            <optgroup label="FREE - Microsoft Phi & Others">
               {availableModels.filter(m => m.category === 'free-modern' && (m.provider === 'Microsoft' || m.provider === 'Alibaba')).map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </optgroup>
-            <optgroup label="📉 OLD & WEAK - Free (Baseline Comparison)">
+            <optgroup label="OLD & WEAK - Free (Baseline Comparison)">
               {availableModels.filter(m => m.category === 'old-weak').map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </optgroup>
-            <optgroup label="💰 PAID - Premium Models">
+            <optgroup label="PAID - Premium Models">
               {availableModels.filter(m => m.category === 'paid').map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
@@ -457,8 +494,8 @@ function AIResultsPanel({ aiResults: initialResults, metrics, correctAnswer, que
             )}
           </button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          💡 <strong>Tip:</strong> Free models (🆓) have no cost limits. Try <strong>Llama 3.1 70B</strong> or <strong>Gemini 1.5 Pro</strong> for best results! Old models (📉) are weaker for baseline comparison.
+        <p className="text-xs text-gray-500 mt-3 px-3 py-2 bg-indigo-50/50 rounded-lg border border-indigo-100">
+          <span className="font-medium text-indigo-900">Tip:</span> Free models have no cost limits. Try Llama 3.1 70B or Gemini 1.5 Pro for best results. Old models are weaker for baseline comparison.
         </p>
       </div>
     </div>
@@ -618,10 +655,20 @@ function ESBadge({ score }: { score: number }) {
 
 function ScoreContribution({ label, value, weight }: { label: string; value: number; weight: number }) {
   const contribution = (value * weight) / 100;
+  const percentage = value;
+  
   return (
-    <div className="flex items-center justify-between">
-      <span className="opacity-90">{label} ({weight}%)</span>
-      <span className="font-semibold">{contribution.toFixed(1)}</span>
+    <div className="space-y-1">
+      <div className="flex items-center justify-between">
+        <span className="text-gray-700 font-medium">{label} ({weight}%)</span>
+        <span className="font-bold text-gray-900">{contribution.toFixed(1)}</span>
+      </div>
+      <div className="h-1 bg-gray-200/60 rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
     </div>
   );
 }
